@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
 using System.Windows.Forms;
 
 // ReSharper disable LocalizableElement
@@ -12,24 +13,31 @@ namespace PPGManager
         public Form1()
         {
             InitializeComponent();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (Shared.PPGExists()) return;
-            
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = @"People Playground|People Playground.exe";
-            openFileDialog.Title = @"Locate People Playground.exe";
-            if (openFileDialog.ShowDialog() != DialogResult.OK)
+            if (Shared.PPGExists())
             {
-                Environment.Exit(0);
+                
             }
             else
             {
-                Directory.SetCurrentDirectory(Path.GetDirectoryName(openFileDialog.FileName) ?? throw new InvalidOperationException());
-                openFileDialog.Dispose();
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = @"People Playground|People Playground.exe";
+                openFileDialog.Title = @"Locate People Playground.exe";
+                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    Directory.SetCurrentDirectory(Path.GetDirectoryName(openFileDialog.FileName) ?? throw new InvalidOperationException());
+                    openFileDialog.Dispose();
+                }
             }
+            
         }
         
         private void ButtonMods_Click(object sender, EventArgs e)

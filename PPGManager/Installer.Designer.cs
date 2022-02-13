@@ -85,7 +85,7 @@ namespace PPGManager
             this.InfoLabel.Name = "InfoLabel";
             this.InfoLabel.Size = new System.Drawing.Size(533, 105);
             this.InfoLabel.TabIndex = 4;
-            this.InfoLabel.Text = "The mod\'s contents are currently being loaded. Please wait.";
+            this.InfoLabel.Text = "The mod/contraption\'s contents are currently being loaded. Please wait.";
             this.InfoLabel.Click += new System.EventHandler(this.InfoLabel_Click);
             // 
             // Installer
@@ -101,7 +101,8 @@ namespace PPGManager
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.Name = "Installer";
-            this.Text = "People Playground";
+            this.ShowInTaskbar = false;
+            this.Text = "PPG Mod Manager";
             this.Load += new System.EventHandler(this.Installer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).EndInit();
             this.ResumeLayout(false);

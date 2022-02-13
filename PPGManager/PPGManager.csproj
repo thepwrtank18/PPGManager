@@ -13,6 +13,7 @@
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <Deterministic>true</Deterministic>
         <LangVersion>latest</LangVersion>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,60 +35,19 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="System" />
-        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
+        <Reference Include="System.ComponentModel.Composition" />
         <Reference Include="System.Core" />
-        <Reference Include="System.IO.Compression" />
         <Reference Include="System.IO.Compression.FileSystem" />
-        <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
         <Reference Include="System.Numerics" />
-        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-          <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
         <Reference Include="System.Security" />
-        <Reference Include="System.Text.Encoding.CodePages, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-          <HintPath>..\packages\System.Text.Encoding.CodePages.5.0.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Text.Encodings.Web, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Text.Encodings.Web.6.0.0\lib\net461\System.Text.Encodings.Web.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Text.Json, Version=6.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Text.Json.6.0.2\lib\net461\System.Text.Json.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
         <Reference Include="System.Xml.Linq" />
         <Reference Include="System.Data.DataSetExtensions" />
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="System.Data" />
         <Reference Include="System.Deployment" />
         <Reference Include="System.Drawing" />
-        <Reference Include="System.Net.Http" />
         <Reference Include="System.Windows.Forms" />
         <Reference Include="System.Xml" />
     </ItemGroup>
@@ -97,6 +57,18 @@
         </Compile>
         <Compile Include="Installer.Designer.cs">
           <DependentUpon>Installer.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Mods.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Mods.Designer.cs">
+          <DependentUpon>Mods.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Package.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Package.Designer.cs">
+          <DependentUpon>Package.cs</DependentUpon>
         </Compile>
         <Compile Include="Shared.cs" />
         <Compile Include="Contraptions.cs">
@@ -111,14 +83,11 @@
         <Compile Include="Form1.Designer.cs">
             <DependentUpon>Form1.cs</DependentUpon>
         </Compile>
-        <Compile Include="Mods.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Mods.Designer.cs">
-          <DependentUpon>Mods.cs</DependentUpon>
-        </Compile>
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <EmbeddedResource Include="Contraptions.resx">
+          <DependentUpon>Contraptions.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="Form1.resx">
           <DependentUpon>Form1.cs</DependentUpon>
         </EmbeddedResource>
@@ -127,6 +96,9 @@
         </EmbeddedResource>
         <EmbeddedResource Include="Mods.resx">
           <DependentUpon>Mods.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Package.resx">
+          <DependentUpon>Package.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
@@ -137,7 +109,7 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
-        <None Include="packages.config" />
+        <None Include="icon.ico" />
         <None Include="Properties\Settings.settings">
             <Generator>SettingsSingleFileGenerator</Generator>
             <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -151,14 +123,75 @@
     <ItemGroup>
         <None Include="App.config" />
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Costura.Fody" Version="5.7.0">
+        <PrivateAssets>all</PrivateAssets>
+        <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+      </PackageReference>
+      <PackageReference Include="Fody" Version="6.6.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.2-mauipre.1.22054.8" />
+      <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.2-mauipre.1.22054.8" />
+      <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
+      <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+      <PackageReference Include="System.AppContext" Version="4.3.0" />
+      <PackageReference Include="System.Buffers" Version="4.5.1" />
+      <PackageReference Include="System.Collections" Version="4.3.0" />
+      <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+      <PackageReference Include="System.Console" Version="4.3.1" />
+      <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+      <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.2-mauipre.1.22054.8" />
+      <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
+      <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
+      <PackageReference Include="System.Globalization" Version="4.3.0" />
+      <PackageReference Include="System.Globalization.Calendars" Version="4.3.0" />
+      <PackageReference Include="System.IO" Version="4.3.0" />
+      <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+      <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+      <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+      <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+      <PackageReference Include="System.Linq" Version="4.3.0" />
+      <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
+      <PackageReference Include="System.Memory" Version="4.5.4" />
+      <PackageReference Include="System.Net.Http" Version="4.3.4" />
+      <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
+      <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
+      <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+      <PackageReference Include="System.ObjectModel" Version="4.3.0" />
+      <PackageReference Include="System.Reflection" Version="4.3.0" />
+      <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+      <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
+      <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+      <PackageReference Include="System.Runtime" Version="4.3.1" />
+      <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.2-mauipre.1.22054.8" />
+      <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+      <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
+      <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+      <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
+      <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
+      <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
+      <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.2-mauipre.1.22054.8" />
+      <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
+      <PackageReference Include="System.Text.Encodings.Web" Version="6.0.2-mauipre.1.22054.8" />
+      <PackageReference Include="System.Text.Json" Version="6.0.2" />
+      <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+      <PackageReference Include="System.Threading" Version="4.3.0" />
+      <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
+      <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+      <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
+      <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+      <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
+      <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Import Project="..\packages\System.Text.Json.6.0.2\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.2\build\System.Text.Json.targets')" />
-    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-      <PropertyGroup>
-        <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
-      </PropertyGroup>
-      <Error Condition="!Exists('..\packages\System.Text.Json.6.0.2\build\System.Text.Json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Text.Json.6.0.2\build\System.Text.Json.targets'))" />
-      <Error Condition="!Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets'))" />
-    </Target>
-    <Import Project="..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets" Condition="Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" />
 </Project>

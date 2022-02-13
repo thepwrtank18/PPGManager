@@ -29,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.ButtonMods = new System.Windows.Forms.Button();
             this.ButtonContraptions = new System.Windows.Forms.Button();
             this.ButtonPlay = new System.Windows.Forms.Button();
@@ -102,9 +103,10 @@
             this.Controls.Add(this.ButtonMods);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "People Playground";
+            this.Text = "PPG Mod Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
         }

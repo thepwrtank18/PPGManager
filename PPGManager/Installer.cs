@@ -20,6 +20,12 @@ namespace PPGManager
         public string ModVersion { get; set; }
         public string GameVersion { get; set; }
         public string ThumbnailPath { get; set; }
+        public bool Active { get; set; }
+        public string EntryPoint { get; set; }
+        public string[] Tags { get; set; }
+        public string[] Scripts { get; set; }
+        public string UGCIdentity { get; set; }
+        public string CreatorUGCIdentity { get; set; }
     }
 
     public class ContraptionInfo
