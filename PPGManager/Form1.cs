@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text.Json;
 using System.Windows.Forms;
 
 // ReSharper disable LocalizableElement
@@ -63,10 +62,11 @@ namespace PPGManager
             e.Effect = DragDropEffects.None;
             string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             string path = filePath[0];
+            string extension = Path.GetExtension(filePath[0]);
             //MessageBox.Show(filePath[0]);
-            if (Path.GetExtension(filePath[0]) != ".zip")
+            if (extension != ".zip" && extension != ".7z" && extension != ".rar")
             {
-                MessageBox.Show(@"Not a .zip file");
+                MessageBox.Show(@"Not a valid file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -74,9 +74,7 @@ namespace PPGManager
                 long size = info.Length;
                 if (size >= 20971520)
                 {
-                    if (MessageBox.Show(
-                            $@"This file is over 20 MB.\nThe file name is {info.Name}.\nIf this is actually a mod/contraption, say Yes.\nOtherwise, say No.",
-                            @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    if (MessageBox.Show($@"This file is over 20 MB.\nThe file name is {info.Name}.\nIf this is actually a mod/contraption, say Yes.\nOtherwise, say No.", @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
                         
                     }
@@ -87,6 +85,7 @@ namespace PPGManager
                 }
                 Installer installer = new Installer();
                 installer.path = path;
+                installer.type = extension;
                 installer.ShowDialog();
             }
         }
@@ -94,8 +93,9 @@ namespace PPGManager
         private void label1_DragEnter(object sender, DragEventArgs e)
         {
             string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            string extension = Path.GetExtension(filePath[0]);
             //MessageBox.Show(filePath[0]);
-            if (Path.GetExtension(filePath[0]) == ".zip")
+            if (extension is ".zip" or ".7z" or ".rar")
             {
                 e.Effect = DragDropEffects.All;
             }
@@ -109,8 +109,8 @@ namespace PPGManager
         private void ButtonFindAddon_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = @"Zip file|*.zip";
-            openFileDialog.Title = @"Find a mod file";
+            openFileDialog.Filter = @"Zip file|*.zip|7-Zip file|*.7z|RAR file|*.rar";
+            openFileDialog.Title = @"Find a mod/contraption file";
             openFileDialog.RestoreDirectory = false;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -132,6 +132,8 @@ namespace PPGManager
                 }
                 Installer installer = new Installer();
                 installer.path = openFileDialog.FileName;
+                string extension = Path.GetExtension(openFileDialog.FileName);
+                installer.type = extension;
                 installer.ShowDialog();
             }
             

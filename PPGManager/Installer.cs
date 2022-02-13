@@ -4,8 +4,14 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Windows.Forms;
 using System.Text.Json;
+using SevenZipNET;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Rar;
+using SharpCompress.Common;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable LocalizableElement
 
@@ -41,6 +47,7 @@ namespace PPGManager
         private ModInfo modInfo;
         private string modtempdir;
         public string path;
+        public string type;
         public Installer()
         {
             InitializeComponent();
@@ -66,19 +73,46 @@ namespace PPGManager
                 Directory.CreateDirectory(modtempdir);
             }
 
-            try
+            if (type == ".zip")
             {
-                ZipFile.ExtractToDirectory(path, modtempdir); // .\TempFiles\randomajdfedhauelakeua
+                try
+                {
+                    ZipFile.ExtractToDirectory(path, modtempdir); // .\TempFiles\randomajdfedhauelakeua
+                    GC.Collect();
+                }
+                catch (InvalidDataException)
+                {
+                    MessageBox.Show("Mod/contraption is corrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Directory.Delete($"TempFiles", true);
+                    Hide();
+                    Close();
+                    return;
+                }   
             }
-            catch (InvalidDataException)
+            else if (type == ".7z")
             {
-                MessageBox.Show("Mod/contraption is corrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Directory.Delete($"TempFiles", true);
-                Hide();
-                Close();
-                return;
+                SevenZipExtractor zz = new SevenZipExtractor(path);
+                SevenZipBase.Path7za = "7za.exe";
+                zz.ExtractAll(modtempdir);
+                GC.Collect();
             }
-            
+            else if (type == ".rar")
+            {
+                RarArchive archive = RarArchive.Open(path);
+                foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    entry.WriteToDirectory(modtempdir, new ExtractionOptions()
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true
+                    });
+
+                }
+                
+                archive.Dispose();
+                GC.Collect();
+            }
+
             if (!File.Exists($@"{modtempdir}\mod.json")) // contraption
             {
                 string[] files = Directory.GetFiles(modtempdir, "*.json");
