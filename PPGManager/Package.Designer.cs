@@ -78,6 +78,7 @@ partial class Package
         // 
         // StartPackage
         // 
+        this.StartPackage.Enabled = false;
         this.StartPackage.Location = new System.Drawing.Point(197, 96);
         this.StartPackage.Name = "StartPackage";
         this.StartPackage.Size = new System.Drawing.Size(75, 23);

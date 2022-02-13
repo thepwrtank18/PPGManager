@@ -51,11 +51,15 @@ public partial class Package : Form
                 WriteIndented = true
             };
             string jsonString = JsonSerializer.Serialize(newJson, options);
+            if (File.Exists(@"Mods\mod_backup.json"))
+            {
+                File.Delete(@"Mods\mod_backup.json");
+            }
+            
             File.Move($@"Mods\{fileName}\mod.json", @"Mods\mod_backup.json");
             File.Create($@"Mods\{fileName}\mod.json").Dispose();
             File.WriteAllText($@"Mods\{fileName}\mod.json", jsonString);   
         }
-        
         if (File.Exists(FileLocation.Text))
         {
             File.Delete(FileLocation.Text);
