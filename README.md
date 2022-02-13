@@ -32,8 +32,8 @@ Toggle the Enabled checkbox on, and it will be set to on next time you open the 
 Turn it off, it's off.
 
 #### Packaging
-![image](https://user-images.githubusercontent.com/57580668/153779154-04bd6545-f916-47bd-81ad-1bb17eb2413f.png) <br />
-Press the Search button to locate a place to save the mod. After that, press Save to save it to that location.
+![image](https://user-images.githubusercontent.com/57580668/153779233-6c93e453-9af0-4c59-8dfb-05dbbbcc9644.png) <br />
+Press the Search button to locate a place to save the mod. After that, press Save to save it to that location. If you want the mod to be enabled on install, tick the "Enable mod by default" checkbox.
 
 #### Deleting
 Deleting will remove the mod from your hard drive. Simple as that.
