@@ -124,7 +124,6 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="7z.NET" Version="1.0.3" />
       <PackageReference Include="Costura.Fody" Version="5.7.0">
         <PrivateAssets>all</PrivateAssets>
         <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->

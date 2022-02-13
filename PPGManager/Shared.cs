@@ -9,8 +9,7 @@ namespace PPGManager
 {
     public static class Shared
     {
-        public static string[] args;
-        
+
         /// <summary>
         /// Checks for People Playground on the current directory.
         /// </summary>

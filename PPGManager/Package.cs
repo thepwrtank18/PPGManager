@@ -73,14 +73,7 @@ public partial class Package : Form
     {
         try
         {
-            if (Directory.Exists(Path.GetDirectoryName(FileLocation.Text)))
-            {
-                StartPackage.Enabled = true;
-            }
-            else
-            {
-                StartPackage.Enabled = false;
-            }
+            StartPackage.Enabled = Directory.Exists(Path.GetDirectoryName(FileLocation.Text));
         }
         catch (Exception)
         {

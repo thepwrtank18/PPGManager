@@ -3,14 +3,14 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Windows.Forms;
 using System.Text.Json;
-using SevenZipNET;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
+using SharpCompress.Archives.SevenZip;
 using SharpCompress.Common;
+using ZipArchive = SharpCompress.Archives.Zip.ZipArchive;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable LocalizableElement
@@ -58,6 +58,48 @@ namespace PPGManager
             
         }
 
+        private void Installer_Extract()
+        {
+            if (type == ".zip")
+            {
+                ZipArchive zarchive = ZipArchive.Open(path);
+                foreach (var entry in zarchive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    entry.WriteToDirectory(modtempdir, new ExtractionOptions()
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true
+                    });
+                }
+                
+                zarchive.Dispose();
+            }
+            else if (type == ".7z")
+            {
+                SevenZipArchive sevenzarchive = SevenZipArchive.Open(path);
+                foreach (var entry in sevenzarchive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    entry.WriteToDirectory(modtempdir, new ExtractionOptions()
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true
+                    });
+                }
+            }
+            else if (type == ".rar")
+            {
+                RarArchive rarchive = RarArchive.Open(path);
+                foreach (var entry in rarchive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    entry.WriteToDirectory(modtempdir, new ExtractionOptions()
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true
+                    });
+                }
+            }
+        }
+        
         private void Installer_Load(object sender, EventArgs e)
         {
             this.DisableCloseButton();
@@ -70,46 +112,8 @@ namespace PPGManager
             }
 
             Directory.CreateDirectory(modtempdir);
-
-            if (type == ".zip")
-            {
-                try
-                {
-                    ZipFile.ExtractToDirectory(path, modtempdir); // .\TempFiles\randomajdfedhauelakeua
-                    GC.Collect();
-                }
-                catch (InvalidDataException)
-                {
-                    MessageBox.Show("Mod/contraption is corrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Directory.Delete($"TempFiles", true);
-                    Hide();
-                    Close();
-                    return;
-                }   
-            }
-            else if (type == ".7z")
-            {
-                SevenZipExtractor zz = new SevenZipExtractor(path);
-                SevenZipBase.Path7za = "7za.exe";
-                zz.ExtractAll(modtempdir);
-                GC.Collect();
-            }
-            else if (type == ".rar")
-            {
-                RarArchive archive = RarArchive.Open(path);
-                foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    entry.WriteToDirectory(modtempdir, new ExtractionOptions()
-                    {
-                        ExtractFullPath = true,
-                        Overwrite = true
-                    });
-
-                }
-                
-                archive.Dispose();
-                GC.Collect();
-            }
+            
+            Installer_Extract();
 
             if (!File.Exists($@"{modtempdir}\mod.json")) // contraption
             {
@@ -137,6 +141,13 @@ namespace PPGManager
                     NameLabel.Text = contraptionInfo.DisplayName;
                     InfoLabel.Text = $"Type: Contraption\n" +
                                      $"Required game version: {contraptionInfo.Version}";
+
+                    if (Directory.Exists($@"Contraptions\{contraptionInfo.DisplayName.Replace(" ", "")}"))
+                    {
+                        button1.Text = "Reinstall";
+                        DeleteButton.Enabled = true;
+                    }
+                    
                     button1.Enabled = true;
                 }
                 catch (Exception)
@@ -178,6 +189,13 @@ namespace PPGManager
                                      $"Mod version: {modInfo.ModVersion}\n" +
                                      $"Required game version: {modInfo.GameVersion}\n" +
                                      $"Description: {modInfo.Description}";
+                    
+                    if (Directory.Exists($@"Mods\{modInfo.Name.Replace(" ", "")}"))
+                    {
+                        button1.Text = "Reinstall";
+                        DeleteButton.Enabled = true;
+                    }
+                    
                     button1.Enabled = true;
                 }
                 catch (Exception)
@@ -237,6 +255,30 @@ namespace PPGManager
                 MessageBox.Show("Successfully installed mod.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Hide();
                 this.Close();
+            }
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists($@"{modtempdir}\mod.json")) // contraption
+            {
+                if (MessageBox.Show(@$"Are you sure you want to delete {contraptionInfo.DisplayName}?", @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    string fileName = contraptionInfo.Name.Replace(" ", "");
+                    Directory.Delete($@"Contraptions\{fileName}", true);
+                    DeleteButton.Enabled = false;
+                    button1.Text = "Install";
+                }
+            }
+            else // mod
+            {
+                if (MessageBox.Show(@$"Are you sure you want to delete {modInfo.Name}?", @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    string fileName = modInfo.Name.Replace(" ", "");
+                    Directory.Delete($@"Mods\{fileName}", true);
+                    DeleteButton.Enabled = false;
+                    button1.Text = "Install";
+                }
             }
         }
     }

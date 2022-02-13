@@ -36,6 +36,7 @@ namespace PPGManager
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.InfoLabel = new System.Windows.Forms.Label();
+            this.DeleteButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -88,10 +89,22 @@ namespace PPGManager
             this.InfoLabel.Text = "The mod/contraption\'s contents are currently being loaded. Please wait.";
             this.InfoLabel.Click += new System.EventHandler(this.InfoLabel_Click);
             // 
+            // DeleteButton
+            // 
+            this.DeleteButton.Enabled = false;
+            this.DeleteButton.Location = new System.Drawing.Point(233, 207);
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(100, 30);
+            this.DeleteButton.TabIndex = 5;
+            this.DeleteButton.Text = "Delete";
+            this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            // 
             // Installer
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(557, 249);
+            this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.InfoLabel);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -107,6 +120,8 @@ namespace PPGManager
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button DeleteButton;
 
         private System.Windows.Forms.Label InfoLabel;
 

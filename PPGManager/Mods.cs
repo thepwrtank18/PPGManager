@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.IO.Compression;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Windows.Forms;
@@ -16,7 +15,7 @@ public partial class Mods : Form
         InitializeComponent();
     }
 
-    public bool CheckboxAutoAction = true;
+    private bool _checkboxAutoAction = true;
     
     private void Mods_Load(object sender, EventArgs e)
     {
@@ -30,7 +29,7 @@ public partial class Mods : Form
 
     private void ModsListBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-        CheckboxAutoAction = true;
+        _checkboxAutoAction = true;
         
         string selectedMod = ModsListBox.GetItemText(ModsListBox.SelectedItem);
         string fileName = selectedMod.Replace(" ", "");
@@ -77,7 +76,7 @@ public partial class Mods : Form
             ModEnabled.Checked = false;
         }
 
-        CheckboxAutoAction = false;
+        _checkboxAutoAction = false;
     }
 
     private void DeleteButton_Click(object sender, EventArgs e)
@@ -101,7 +100,7 @@ public partial class Mods : Form
 
     private void ModEnabled_CheckedChanged(object sender, EventArgs e)
     {
-        if (CheckboxAutoAction == false)
+        if (_checkboxAutoAction == false)
         {
             string selectedMod = ModsListBox.GetItemText(ModsListBox.SelectedItem);
             string fileName = selectedMod.Replace(" ", "");
