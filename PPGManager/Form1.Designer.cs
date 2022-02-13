@@ -32,6 +32,8 @@
             this.ButtonMods = new System.Windows.Forms.Button();
             this.ButtonContraptions = new System.Windows.Forms.Button();
             this.ButtonPlay = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ButtonFindAddon = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ButtonMods
@@ -64,20 +66,52 @@
             this.ButtonPlay.UseVisualStyleBackColor = true;
             this.ButtonPlay.Click += new System.EventHandler(this.ButtonPlay_Click);
             // 
+            // label1
+            // 
+            this.label1.AllowDrop = true;
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label1.Location = new System.Drawing.Point(12, 45);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(290, 111);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Drag to add mods/contraptions, or";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.DragDrop += new System.Windows.Forms.DragEventHandler(this.label1_DragDrop);
+            this.label1.DragEnter += new System.Windows.Forms.DragEventHandler(this.label1_DragEnter);
+            this.label1.DragLeave += new System.EventHandler(this.label1_DragLeave);
+            // 
+            // ButtonFindAddon
+            // 
+            this.ButtonFindAddon.Location = new System.Drawing.Point(108, 112);
+            this.ButtonFindAddon.Name = "ButtonFindAddon";
+            this.ButtonFindAddon.Size = new System.Drawing.Size(97, 23);
+            this.ButtonFindAddon.TabIndex = 4;
+            this.ButtonFindAddon.Text = "Find in Explorer";
+            this.ButtonFindAddon.UseVisualStyleBackColor = true;
+            this.ButtonFindAddon.Click += new System.EventHandler(this.ButtonFindAddon_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(314, 201);
+            this.Controls.Add(this.ButtonFindAddon);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.ButtonPlay);
             this.Controls.Add(this.ButtonContraptions);
             this.Controls.Add(this.ButtonMods);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "People Playground";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button ButtonFindAddon;
+
+        private System.Windows.Forms.Label label1;
 
         private System.Windows.Forms.Button ButtonPlay;
 
