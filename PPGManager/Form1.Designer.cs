@@ -73,7 +73,7 @@
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label1.Location = new System.Drawing.Point(12, 45);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(290, 111);
+            this.label1.Size = new System.Drawing.Size(290, 110);
             this.label1.TabIndex = 3;
             this.label1.Text = "Drag to add mods/contraptions, or";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

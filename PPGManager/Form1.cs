@@ -2,21 +2,22 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-
+// ReSharper disable InconsistentNaming
 // ReSharper disable LocalizableElement
 
 namespace PPGManager
 {
+
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
             if (Shared.PPGExists())
             {
                 
@@ -32,13 +33,13 @@ namespace PPGManager
                 }
                 else
                 {
-                    Directory.SetCurrentDirectory(Path.GetDirectoryName(openFileDialog.FileName) ?? throw new InvalidOperationException());
+                    Directory.SetCurrentDirectory(Path.GetDirectoryName(openFileDialog.FileName) ??
+                                                  throw new InvalidOperationException());
                     openFileDialog.Dispose();
                 }
             }
-            
         }
-        
+
         private void ButtonMods_Click(object sender, EventArgs e)
         {
             Mods mods = new Mods();

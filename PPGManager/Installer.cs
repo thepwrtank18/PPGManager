@@ -68,10 +68,8 @@ namespace PPGManager
                 throw new DuplicateNameException(
                     "You must be really lucky, because your PC made a random string more than once. If this happens often, delete the TempFiles folder in your People Playground folder.");
             }
-            else
-            {
-                Directory.CreateDirectory(modtempdir);
-            }
+
+            Directory.CreateDirectory(modtempdir);
 
             if (type == ".zip")
             {
