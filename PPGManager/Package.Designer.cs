@@ -36,6 +36,7 @@ partial class Package
         this.FileButton = new System.Windows.Forms.Button();
         this.EnableCheckBox = new System.Windows.Forms.CheckBox();
         this.StartPackage = new System.Windows.Forms.Button();
+        this.label2 = new System.Windows.Forms.Label();
         this.SuspendLayout();
         // 
         // label1
@@ -79,19 +80,29 @@ partial class Package
         // StartPackage
         // 
         this.StartPackage.Enabled = false;
-        this.StartPackage.Location = new System.Drawing.Point(197, 96);
+        this.StartPackage.Location = new System.Drawing.Point(198, 96);
         this.StartPackage.Name = "StartPackage";
-        this.StartPackage.Size = new System.Drawing.Size(75, 23);
+        this.StartPackage.Size = new System.Drawing.Size(74, 23);
         this.StartPackage.TabIndex = 4;
         this.StartPackage.Text = "Save";
         this.StartPackage.UseVisualStyleBackColor = true;
         this.StartPackage.Click += new System.EventHandler(this.StartPackage_Click);
+        // 
+        // label2
+        // 
+        this.label2.Location = new System.Drawing.Point(12, 100);
+        this.label2.Name = "label2";
+        this.label2.Size = new System.Drawing.Size(130, 19);
+        this.label2.TabIndex = 5;
+        this.label2.Text = "This may take a while.";
+        this.label2.Visible = false;
         // 
         // Package
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(284, 131);
+        this.Controls.Add(this.label2);
         this.Controls.Add(this.StartPackage);
         this.Controls.Add(this.EnableCheckBox);
         this.Controls.Add(this.FileButton);
@@ -106,6 +117,8 @@ partial class Package
         this.ResumeLayout(false);
         this.PerformLayout();
     }
+
+    private System.Windows.Forms.Label label2;
 
     private System.Windows.Forms.CheckBox EnableCheckBox;
     private System.Windows.Forms.Button StartPackage;

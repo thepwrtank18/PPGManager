@@ -3,6 +3,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 // ReSharper disable LocalizableElement
 // ReSharper disable InconsistentNaming
@@ -64,13 +66,34 @@ public partial class Package : Form
         {
             File.Delete(FileLocation.Text);
         }
-        ZipFile.CreateFromDirectory($"{Type}/{fileName}", FileLocation.Text);
+
+        void Action(object obj)
+        {
+            ZipFile.CreateFromDirectory($"{Type}/{fileName}", FileLocation.Text);
+        }
+
+        Task createZip = new Task(Action, null);
+        label2.Visible = true;
+        EnableCheckBox.Enabled = false;
+        FileButton.Enabled = false;
+        StartPackage.Enabled = false;
+        FileLocation.Enabled = false;
+        createZip.Start(); // prevents hanging
+        createZip.Wait();
         if (Type == Mod)
         {
             File.Delete($@"Mods\{fileName}\mod.json");
             File.Move(@"Mods\mod_backup.json", $@"Mods\{fileName}\mod.json");
         }
         MessageBox.Show($"Created package at:\n{FileLocation.Text}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        label2.Visible = false;
+        if (Type == Mod)
+        {
+            EnableCheckBox.Enabled = true;
+        }
+        FileButton.Enabled = true;
+        StartPackage.Enabled = true;
+        FileLocation.Enabled = true;
     }
 
     private void FileLocation_TextChanged(object sender, EventArgs e)

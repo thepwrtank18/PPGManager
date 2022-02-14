@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -94,7 +95,17 @@ namespace PPGManager
         public static void DisableCloseButton(this Form form)
         {
             // The 1 parameter means to gray out. 0xF060 is SC_CLOSE.
-            EnableMenuItem(GetSystemMenu(form.Handle, false), 0xF060, 1);
+            try
+            {
+                EnableMenuItem(GetSystemMenu(form.Handle, false), 0xF060, 1);
+            }
+            catch (InvalidOperationException e)
+            {
+                //if (Debugger.IsAttached)
+                //{
+                //    throw;
+                //}
+            }
         }
 
         /// <summary>

@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 // ReSharper disable LocalizableElement
 
@@ -19,12 +21,23 @@ public partial class Mods : Form
     
     private void Mods_Load(object sender, EventArgs e)
     {
-        ModsListBox.Items.Clear();
-        foreach (string s in Directory.GetDirectories("Mods", "*", SearchOption.TopDirectoryOnly))
+
+        void Action(object obj)
         {
-            ModInfo modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText($"{s}/mod.json"));
-            if (modInfo != null) ModsListBox.Items.Add(modInfo.Name);
+            List<string> modList = new List<string>();
+            
+            foreach (string s in Directory.GetDirectories("Mods", "*", SearchOption.TopDirectoryOnly))
+            {
+                ModInfo modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText($"{s}/mod.json"));
+                if (modInfo != null) modList.Add(modInfo.Name);
+            }
+            
+            ModsListBox.DataSource = modList;
+            ModsListBox.SelectedItem = null;
         }
+
+        Task loadMods = new Task(Action, null);
+        loadMods.Start(); // multithreading solves all your problems
     }
 
     private void ModsListBox_SelectedIndexChanged(object sender, EventArgs e)

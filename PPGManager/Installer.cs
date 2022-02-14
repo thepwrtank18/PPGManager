@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Text.Json;
+using System.Threading.Tasks;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
 using SharpCompress.Archives.SevenZip;
@@ -65,11 +66,25 @@ namespace PPGManager
                 ZipArchive zarchive = ZipArchive.Open(path);
                 foreach (var entry in zarchive.Entries.Where(entry => !entry.IsDirectory))
                 {
-                    entry.WriteToDirectory(modtempdir, new ExtractionOptions()
+                    try
                     {
-                        ExtractFullPath = true,
-                        Overwrite = true
-                    });
+                        entry.WriteToDirectory(modtempdir, new ExtractionOptions()
+                        {
+                            ExtractFullPath = true,
+                            Overwrite = true
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.Message.Contains("Directory does not exist to extract to:"))
+                        {
+                            
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
                 }
                 
                 zarchive.Dispose();
@@ -99,8 +114,8 @@ namespace PPGManager
                 }
             }
         }
-        
-        private void Installer_Load(object sender, EventArgs e)
+
+        private void LoadInstaller()
         {
             this.DisableCloseButton();
             string randomstr = Shared.RandomString(20);
@@ -112,9 +127,15 @@ namespace PPGManager
             }
 
             Directory.CreateDirectory(modtempdir);
-            
-            Installer_Extract();
 
+            void Action(object obj)
+            {
+                Installer_Extract();
+            }
+
+            Task extractFiles = new Task(Action, null);
+            extractFiles.Start();
+            extractFiles.Wait();
             if (!File.Exists($@"{modtempdir}\mod.json")) // contraption
             {
                 string[] files = Directory.GetFiles(modtempdir, "*.json");
@@ -174,41 +195,79 @@ namespace PPGManager
                         
                         // it will handle it later
                 }
-                
+
                 try
                 {
                     // ReSharper disable once PossibleNullReferenceException
-                    Image image = Image.FromFile($@"{modtempdir}\{modInfo.ThumbnailPath}");
-                    byte[] imageBytes = Shared.ImageToByteArray(image); // stores the image as a byte array in memory
-                    IconBox.Image = Shared.ByteArrayToImage(imageBytes); // sets the PictureBox to the byte array as an image
-                    image.Dispose(); // makes the actual image file freed from the program (so it can move it)
-                    this.Text = modInfo.Name;
-                    NameLabel.Text = modInfo.Name;
-                    InfoLabel.Text = $"by {modInfo.Author}\n" +
-                                     $"Type: Mod\n" +
-                                     $"Mod version: {modInfo.ModVersion}\n" +
-                                     $"Required game version: {modInfo.GameVersion}\n" +
-                                     $"Description: {modInfo.Description}";
-                    
+                    try
+                    {
+                        Image image = Image.FromFile($@"{modtempdir}\{modInfo.ThumbnailPath}");
+                        byte[] imageBytes = Shared.ImageToByteArray(image); // stores the image as a byte array in memory
+                        IconBox.Image =
+                            Shared.ByteArrayToImage(imageBytes); // sets the PictureBox to the byte array as an image
+                        image.Dispose(); // makes the actual image file freed from the program (so it can move it)
+                        this.Text = modInfo.Name;
+                        NameLabel.Text = modInfo.Name;
+                        InfoLabel.Text = $"by {modInfo.Author}\n" +
+                                         $"Type: Mod\n" +
+                                         $"Mod version: {modInfo.ModVersion}\n" +
+                                         $"Required game version: {modInfo.GameVersion}\n" +
+                                         $"Description: {modInfo.Description}";
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        
+                    }
+
                     if (Directory.Exists($@"Mods\{modInfo.Name.Replace(" ", "")}"))
                     {
-                        button1.Text = "Reinstall";
+                        ModInfo currentModInfo =
+                            JsonSerializer.Deserialize<ModInfo>(
+                                File.ReadAllText($@"Mods\{modInfo.Name.Replace(" ", "")}\mod.json"));
+                        // ReSharper disable once PossibleNullReferenceException
+                        int currentModVersion = Convert.ToInt32(currentModInfo.ModVersion.Replace(".", ""));
+                        int latestModVersion = Convert.ToInt32(modInfo.ModVersion.Replace(".", ""));
+                        if (latestModVersion > currentModVersion)
+                        {
+                            button1.Text = "Update";
+                        }
+                        else if (latestModVersion < currentModVersion)
+                        {
+                            button1.Text = "Downgrade";
+                        }
+                        else
+                        {
+                            button1.Text = "Reinstall";
+                        }
+
                         DeleteButton.Enabled = true;
                     }
-                    
+
                     button1.Enabled = true;
                 }
                 catch (Exception)
                 {
-                    //if (Debugger.IsAttached)
-                        //throw;
+                    if (Debugger.IsAttached)
+                        throw;
                     
                     MessageBox.Show("Failed to get required mod information. It may be corrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Directory.Delete($"TempFiles", true);
                     this.Hide();
-                    this.Close();
+                    this.Close();   
                 }
             }
+        }
+        
+        private void Installer_Load(object sender, EventArgs e)
+        {
+            void LoadInst(object obj)
+            {
+                LoadInstaller();
+            }
+
+            Task loadinst = new Task(LoadInst, null);
+            
+            loadinst.Start();
         }
 
         private void button2_Click(object sender, EventArgs e)

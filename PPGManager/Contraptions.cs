@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 // ReSharper disable LocalizableElement
 
@@ -16,13 +18,23 @@ namespace PPGManager
         
         private void Contraptions_Load(object sender, EventArgs e)
         {
-            ContraptionsListBox.Items.Clear();
-            foreach (string s in Directory.GetDirectories("Contraptions", "*", SearchOption.TopDirectoryOnly))
+            void Action(object obj)
             {
-                string[] files = Directory.GetFiles(s, "*.json");
-                ContraptionInfo contraptionInfo = JsonSerializer.Deserialize<ContraptionInfo>(File.ReadAllText(files[0]));
-                if (contraptionInfo != null) ContraptionsListBox.Items.Add(contraptionInfo.DisplayName);
+                List<string> contraptionList = new List<string>();
+                
+                foreach (string s in Directory.GetDirectories("Contraptions", "*", SearchOption.TopDirectoryOnly))
+                {
+                    string[] files = Directory.GetFiles(s, "*.json");
+                    ContraptionInfo contraptionInfo = JsonSerializer.Deserialize<ContraptionInfo>(File.ReadAllText(files[0]));
+                    if (contraptionInfo != null) contraptionList.Add(contraptionInfo.DisplayName);
+                }
+
+                ContraptionsListBox.DataSource = contraptionList;
+                ContraptionsListBox.SelectedItem = null;
             }
+
+            Task loadContraptions = new Task(Action, null);
+            loadContraptions.Start();
         }
 
         private void ContraptionsListBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -75,7 +75,8 @@ namespace PPGManager
                 long size = info.Length;
                 if (size >= 20971520)
                 {
-                    if (MessageBox.Show($@"This file is over 20 MB.\nThe file name is {info.Name}.\nIf this is actually a mod/contraption, say Yes.\nOtherwise, say No.", @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    string rslashn = Environment.NewLine;
+                    if (MessageBox.Show($"This file is over 20 MB.{rslashn}The file name is {info.Name}.{rslashn}If this is actually a mod/contraption, say Yes.{rslashn}Otherwise, say No.", @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
                         
                     }
@@ -119,9 +120,11 @@ namespace PPGManager
                 long size = info.Length;
                 if (size >= 20971520)
                 {
+                    string rslashn = Environment.NewLine;
+
                     if (MessageBox.Show(
                             
-                            $"This file is over 20 MB.\nThe file name is {info.Name}.\nIf this is actually a mod/contraption, say Yes.\nOtherwise, say No.",
+                            $"This file is over 20 MB.{rslashn}The file name is {info.Name}.{rslashn}If this is actually a mod/contraption, say Yes.{rslashn}Otherwise, say No.",
                             @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
                         
