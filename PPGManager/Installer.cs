@@ -170,6 +170,7 @@ namespace PPGManager
                         
                     }
 
+                    // ReSharper disable once PossibleNullReferenceException
                     if (Directory.Exists($@"Contraptions\{contraptionInfo.DisplayName.Replace(" ", "")}"))
                     {
                         button1.Text = "Reinstall";
@@ -226,6 +227,7 @@ namespace PPGManager
                         
                     }
 
+                    // ReSharper disable once PossibleNullReferenceException
                     if (Directory.Exists($@"Mods\{modInfo.Name.Replace(" ", "")}"))
                     {
                         ModInfo currentModInfo =
