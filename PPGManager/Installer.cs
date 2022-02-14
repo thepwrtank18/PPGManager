@@ -154,14 +154,21 @@ namespace PPGManager
                 try
                 {
                     // ReSharper disable once PossibleNullReferenceException
-                    Image image = Image.FromFile($@"{modtempdir}\{contraptionInfo.Name}.png");
-                    byte[] imageBytes = Shared.ImageToByteArray(image); // stores the image as a byte array in memory
-                    IconBox.Image = Shared.ByteArrayToImage(imageBytes); // sets the PictureBox to the byte array as an image
-                    image.Dispose(); // makes the actual image file freed from the program (so it can move it)
-                    this.Text = contraptionInfo.DisplayName;
-                    NameLabel.Text = contraptionInfo.DisplayName;
-                    InfoLabel.Text = $"Type: Contraption\n" +
-                                     $"Required game version: {contraptionInfo.Version}";
+                    try
+                    {
+                        Image image = Image.FromFile($@"{modtempdir}\{contraptionInfo.Name}.png");
+                        byte[] imageBytes = Shared.ImageToByteArray(image); // stores the image as a byte array in memory
+                        IconBox.Image = Shared.ByteArrayToImage(imageBytes); // sets the PictureBox to the byte array as an image
+                        image.Dispose(); // makes the actual image file freed from the program (so it can move it)
+                        this.Text = contraptionInfo.DisplayName;
+                        NameLabel.Text = contraptionInfo.DisplayName;
+                        InfoLabel.Text = $"Type: Contraption\n" +
+                                         $"Required game version: {contraptionInfo.Version}";
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        
+                    }
 
                     if (Directory.Exists($@"Contraptions\{contraptionInfo.DisplayName.Replace(" ", "")}"))
                     {
