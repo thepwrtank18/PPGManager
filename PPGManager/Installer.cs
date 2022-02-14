@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -136,6 +137,7 @@ namespace PPGManager
             Task extractFiles = new Task(Action, null);
             extractFiles.Start();
             extractFiles.Wait();
+            CheckForIllegalCrossThreadCalls = false;
             if (!File.Exists($@"{modtempdir}\mod.json")) // contraption
             {
                 string[] files = Directory.GetFiles(modtempdir, "*.json");
@@ -178,9 +180,11 @@ namespace PPGManager
                     }
                     
                     button1.Enabled = true;
+                    button2.Enabled = true;
                 }
                 catch (Exception)
                 {
+                    
                     if (Debugger.IsAttached)
                         throw;
 
@@ -253,6 +257,7 @@ namespace PPGManager
                     }
 
                     button1.Enabled = true;
+                    button2.Enabled = true;
                 }
                 catch (Exception)
                 {
@@ -267,18 +272,18 @@ namespace PPGManager
             }
         }
         
+        private Task loadinst;
         private void Installer_Load(object sender, EventArgs e)
         {
-            void LoadInst(object obj)
-            {
-                LoadInstaller();
-            }
-
-            Task loadinst = new Task(LoadInst, null);
-            
+            loadinst = new Task(LoadInst, null);
             loadinst.Start();
         }
 
+        
+        private void LoadInst(object obj)
+        {
+            LoadInstaller();
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             Directory.Delete($"TempFiles", true);
