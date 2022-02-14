@@ -64,7 +64,6 @@ namespace PPGManager
             string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             string path = filePath[0];
             string extension = Path.GetExtension(filePath[0]);
-            //MessageBox.Show(filePath[0]);
             if (extension != ".zip" && extension != ".7z" && extension != ".rar")
             {
                 MessageBox.Show(@"Not a valid file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
