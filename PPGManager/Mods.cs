@@ -26,9 +26,15 @@ public partial class Mods : Form
         {
             List<string> modList = new List<string>();
             
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                AllowTrailingCommas = true
+            };
             foreach (string s in Directory.GetDirectories("Mods", "*", SearchOption.TopDirectoryOnly))
             {
-                ModInfo modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText($"{s}/mod.json"));
+
+                ModInfo modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText($"{s}/mod.json"), options);
                 if (modInfo != null) modList.Add(modInfo.Name);
             }
             
@@ -47,11 +53,17 @@ public partial class Mods : Form
         string selectedMod = ModsListBox.GetItemText(ModsListBox.SelectedItem);
         string fileName = selectedMod.Replace(" ", "");
 
+        
+        JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            AllowTrailingCommas = true
+        };
         try
         {
             ModInfo modInfo =
                 JsonSerializer.Deserialize<ModInfo>(
-                    File.ReadAllText($@"Mods\{fileName}\mod.json"));
+                    File.ReadAllText($@"Mods\{fileName}\mod.json"), options);
 
             if (modInfo != null)
             {

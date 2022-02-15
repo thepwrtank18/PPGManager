@@ -99,12 +99,13 @@ namespace PPGManager
             {
                 EnableMenuItem(GetSystemMenu(form.Handle, false), 0xF060, 1);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
-                //if (Debugger.IsAttached)
-                //{
-                //    throw;
-                //}
+                
+                if (Debugger.IsAttached)
+                {
+                    throw;
+                }
             }
         }
 

@@ -4,7 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Runtime.InteropServices;
+using System.Text.Encodings.Web;
 using System.Windows.Forms;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -116,9 +117,13 @@ namespace PPGManager
             }
         }
 
+        [DllImport("user32")]
+        private static extern bool EnableMenuItem(IntPtr hMenu, uint itemId, uint uEnable);
+        [DllImport("user32")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        
         private void LoadInstaller()
         {
-            this.DisableCloseButton();
             string randomstr = Shared.RandomString(20);
             modtempdir = $@"{Directory.GetCurrentDirectory()}\TempFiles\{randomstr}";
             if (Directory.Exists(modtempdir))
@@ -143,7 +148,12 @@ namespace PPGManager
                 string[] files = Directory.GetFiles(modtempdir, "*.json");
                 try
                 {
-                    contraptionInfo = JsonSerializer.Deserialize<ContraptionInfo>(File.ReadAllText(files[0]));
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                        AllowTrailingCommas = true
+                    };
+                    contraptionInfo = JsonSerializer.Deserialize<ContraptionInfo>(File.ReadAllText(files[0]), options);
                 }
                 catch (Exception)
                 {
@@ -198,7 +208,12 @@ namespace PPGManager
             {
                 try
                 {
-                    modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText($@"{modtempdir}\mod.json"));
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                        AllowTrailingCommas = true
+                    };
+                    modInfo = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText($@"{modtempdir}\mod.json"), options);
                 }
                 catch (JsonException)
                 {
@@ -234,12 +249,28 @@ namespace PPGManager
                     // ReSharper disable once PossibleNullReferenceException
                     if (Directory.Exists($@"Mods\{modInfo.Name.Replace(" ", "")}"))
                     {
+                        JsonSerializerOptions options = new JsonSerializerOptions
+                        {
+                            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                            AllowTrailingCommas = true
+                        };
+                        
                         ModInfo currentModInfo =
                             JsonSerializer.Deserialize<ModInfo>(
-                                File.ReadAllText($@"Mods\{modInfo.Name.Replace(" ", "")}\mod.json"));
+                                File.ReadAllText($@"Mods\{modInfo.Name.Replace(" ", "")}\mod.json"), options);
                         // ReSharper disable once PossibleNullReferenceException
-                        int currentModVersion = Convert.ToInt32(currentModInfo.ModVersion.Replace(".", ""));
-                        int latestModVersion = Convert.ToInt32(modInfo.ModVersion.Replace(".", ""));
+                        int currentModVersion = 0;
+                        int latestModVersion = 0;
+                        try
+                        {
+                            // ReSharper disable once PossibleNullReferenceException
+                            currentModVersion = Convert.ToInt32(currentModInfo.ModVersion.Replace(".", ""));
+                            latestModVersion = Convert.ToInt32(modInfo.ModVersion.Replace(".", ""));
+                        }
+                        catch (Exception)
+                        {
+                            button1.Text = "Reinstall";
+                        }
                         if (latestModVersion > currentModVersion)
                         {
                             button1.Text = "Update";
@@ -275,6 +306,7 @@ namespace PPGManager
         private Task loadinst;
         private void Installer_Load(object sender, EventArgs e)
         {
+            EnableMenuItem(GetSystemMenu(this.Handle, false), 0xF060, 1);
             loadinst = new Task(LoadInst, null);
             loadinst.Start();
         }

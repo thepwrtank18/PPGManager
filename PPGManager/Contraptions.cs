@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,11 +22,15 @@ namespace PPGManager
             void Action(object obj)
             {
                 List<string> contraptionList = new List<string>();
-                
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    AllowTrailingCommas = true
+                };
                 foreach (string s in Directory.GetDirectories("Contraptions", "*", SearchOption.TopDirectoryOnly))
                 {
                     string[] files = Directory.GetFiles(s, "*.json");
-                    ContraptionInfo contraptionInfo = JsonSerializer.Deserialize<ContraptionInfo>(File.ReadAllText(files[0]));
+                    ContraptionInfo contraptionInfo = JsonSerializer.Deserialize<ContraptionInfo>(File.ReadAllText(files[0]), options);
                     if (contraptionInfo != null) contraptionList.Add(contraptionInfo.DisplayName);
                 }
 
@@ -43,11 +48,17 @@ namespace PPGManager
             string selectedContraption = ContraptionsListBox.GetItemText(ContraptionsListBox.SelectedItem);
             string fileName = selectedContraption.Replace(" ", "");
 
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                AllowTrailingCommas = true
+            };
+            
             try
             {
                 ContraptionInfo contraptionInfo =
                     JsonSerializer.Deserialize<ContraptionInfo>(
-                        File.ReadAllText($@"Contraptions\{fileName}\{selectedContraption}.json"));
+                        File.ReadAllText($@"Contraptions\{fileName}\{selectedContraption}.json"), options);
                 
                 Image image = Image.FromFile($@"Contraptions\{fileName}\{selectedContraption}.png");
                 byte[] imageBytes = Shared.ImageToByteArray(image);
